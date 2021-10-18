@@ -190,6 +190,9 @@ static NSString * const PTCloseAllTabsKey = @"closeAllTabs";
 static NSString * const PTDeleteAllAnnotationsKey = @"deleteAllAnnotations";
 static NSString * const PTOpenAnnotationListKey = @"openAnnotationList";
 
+// xorbix function
+static NSString * const PTShowAnnotToolbarKey = @"showAnnotToolbar";
+
 // argument
 static NSString * const PTDocumentArgumentKey = @"document";
 static NSString * const PTPasswordArgumentKey = @"password";
@@ -210,6 +213,9 @@ static NSString * const PTAnnotationArgumentKey = @"annotation";
 static NSString * const PTAnnotationsWithFlagsArgumentKey = @"annotationsWithFlags";
 static NSString * const PTAnnotationPropertiesArgumentKey = @"annotationProperties";
 static NSString * const PTLeadingNavButtonIconArgumentKey = @"leadingNavButtonIcon";
+
+// xorbix argument
+static NSString * const PTShowAnnotToolbarArgumentsKey = @"showToolbar";
 
 // event strings
 static NSString * const PTExportAnnotationCommandEventKey = @"export_annotation_command_event";

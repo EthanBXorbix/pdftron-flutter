@@ -1202,6 +1202,8 @@
         [self deleteAllAnnotations:result];
     } else if ([call.method isEqualToString:PTOpenAnnotationListKey]) {
         [self openAnnotationList:result];
+    } else if ([call.method isEqualToString:PTShowAnnotToolbarKey]) {
+        bool showToolbarValue = [[PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTShowAnnotToolbarArgumentsKey]] boolValue];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -2350,6 +2352,13 @@
     }
     
     flutterResult(nil);
+}
+
+#pragma mark - Xorbix Functions
+-(void)showAnnotToolbar:(BOOL)showToolbar 
+{
+    PTDocumentController *documentController = [self getDocumentController];
+    documentController.toolbarHidden = showToolbar;
 }
 
 #pragma mark - Helper

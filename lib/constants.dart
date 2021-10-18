@@ -31,6 +31,9 @@ class Functions {
   static const deleteAllAnnotations = "deleteAllAnnotations";
   static const openAnnotationList = "openAnnotationList";
   static const setRequestedOrientation = "setRequestedOrientation";
+
+  // Xorbix functions
+  static const showAnnotToolbar = "showAnnotToolbar";
 }
 
 /// Defines the parameters of the functions.
@@ -55,6 +58,9 @@ class Parameters {
   static const annotationProperties = "annotationProperties";
   static const leadingNavButtonIcon = "leadingNavButtonIcon";
   static const requestedOrientation = "requestedOrientation";
+
+  // Xorbix Parameters
+  static const showToolbar = "showToolbar";
 }
 
 /// Defines the parameters of the events.
