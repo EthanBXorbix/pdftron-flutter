@@ -35,7 +35,7 @@ class _ViewerState extends State<Viewer> {
     super.initState();
     initPlatformState();
 
-    showViewer();
+    //showViewer();
 
     // If you are using local files:
     // * Remove the above line `showViewer();`.
@@ -166,18 +166,50 @@ class _ViewerState extends State<Viewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Xorbix Test'),
+        actions: <Widget>[
+          IconButton(
+              onPressed: personalNotesEventHandler,
+              icon: const Icon(Icons.feed),
+              tooltip: 'Personal Notes'
+          ),
+          IconButton(
+              onPressed: annotationsEventHandler,
+              icon: const Icon(Icons.edit),
+              tooltip: 'Annotations'
+          ),
+          IconButton(
+              onPressed: saveAndSubmitEventHandler,
+              icon: const Icon(Icons.save),
+              tooltip: 'Save/Submit'
+          )
+        ],
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         child:
-            // Uncomment this to use Widget version of the viewer:
-            // _showViewer
-            // ? DocumentView(
-            //     onCreated: _onDocumentViewCreated,
-            //   ):
-            Container(),
+        // Uncomment this to use Widget version of the viewer:
+        _showViewer
+            ? DocumentView(
+          onCreated: _onDocumentViewCreated,
+        ):
+        Container(),
       ),
     );
+  }
+
+  void personalNotesEventHandler() {
+    print('Personal Notes');
+  }
+
+  void annotationsEventHandler() {
+    print('Annotations');
+  }
+
+  void saveAndSubmitEventHandler() {
+    print('Save/Submit');
   }
 
   // This function is used to control the DocumentView widget after it
