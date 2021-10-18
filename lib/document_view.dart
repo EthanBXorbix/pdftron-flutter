@@ -249,4 +249,11 @@ class DocumentViewController {
   Future<void> openAnnotationList() {
     return _channel.invokeMethod(Functions.openAnnotationList);
   }
+
+  /// Determines visibility of toolbar
+  /// Xorbix function
+  Future<void> showAnnotToolbar(bool showToolbar) {
+    return _channel.invokeMethod(Functions.showAnnotToolbar,
+      <String, dynamic>{Parameters.showToolbar: showToolbar});
+  }
 }

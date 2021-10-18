@@ -1204,6 +1204,7 @@
         [self openAnnotationList:result];
     } else if ([call.method isEqualToString:PTShowAnnotToolbarKey]) {
         bool showToolbarValue = [[PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTShowAnnotToolbarArgumentsKey]] boolValue];
+        [self showAnnotToolbar:showToolbarValue];
     } else {
         result(FlutterMethodNotImplemented);
     }
