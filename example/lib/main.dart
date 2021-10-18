@@ -163,26 +163,82 @@ class _ViewerState extends State<Viewer> {
     // documentLoadedCancel();
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+  bool personalNotesIconSelected = false;
+  bool annotationsIconSelected = false;
+
+  Icon personalNotesIcon = Icon(Icons.feed_outlined);
+  Icon annotationsIcon = Icon(Icons.edit_outlined);
+  Icon saveAndSubmitIcon = Icon(Icons.save_outlined);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Xorbix Test'),
         actions: <Widget>[
+
           IconButton(
-              onPressed: personalNotesEventHandler,
-              icon: const Icon(Icons.feed),
-              tooltip: 'Personal Notes'
+            onPressed: () => setState(() {
+              personalNotesIconSelected = !personalNotesIconSelected;
+              annotationsIconSelected = false;
+
+              if (personalNotesIconSelected) {
+                personalNotesIcon = Icon(Icons.feed);
+              } else {
+                personalNotesIcon = Icon(Icons.feed_outlined);
+              }
+
+              if (annotationsIconSelected) {
+                annotationsIcon = Icon(Icons.edit);
+              } else {
+                annotationsIcon = Icon(Icons.edit_outlined);
+              }
+
+              personalNotesEventHandler();
+            }),
+            icon: personalNotesIcon,
+            tooltip: 'Personal Notes'
           ),
           IconButton(
-              onPressed: annotationsEventHandler,
-              icon: const Icon(Icons.edit),
-              tooltip: 'Annotations'
+            onPressed: () => setState(() {
+              annotationsIconSelected = !annotationsIconSelected;
+              personalNotesIconSelected = false;
+
+              if (personalNotesIconSelected) {
+                personalNotesIcon = Icon(Icons.feed);
+              } else {
+                personalNotesIcon = Icon(Icons.feed_outlined);
+              }
+
+              if (annotationsIconSelected) {
+                annotationsIcon = Icon(Icons.edit);
+              } else {
+                annotationsIcon = Icon(Icons.edit_outlined);
+              }
+
+              annotationsEventHandler();
+            }),
+            icon: annotationsIcon,
+            tooltip: 'Annotations'
           ),
           IconButton(
-              onPressed: saveAndSubmitEventHandler,
-              icon: const Icon(Icons.save),
-              tooltip: 'Save/Submit'
+            onPressed: () => setState(() {
+              saveAndSubmitEventHandler();
+            }),
+            icon: saveAndSubmitIcon,
+            tooltip: 'Save/Submit'
           )
         ],
       ),
@@ -209,8 +265,36 @@ class _ViewerState extends State<Viewer> {
   }
 
   void saveAndSubmitEventHandler() {
-    print('Save/Submit');
+    if (personalNotesIconSelected) {
+      print('Personal Note Saved');
+    } else if (annotationsIconSelected) {
+      print('Annotation Saved');
+    } else {
+      print('Nothing Saved');
+    }
   }
+
+  Icon getPersonalNotesIcon() {
+    if (personalNotesIconSelected) {
+      return Icon(Icons.download);
+    } else {
+      return Icon(Icons.upload);
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // This function is used to control the DocumentView widget after it
   // has been created. The widget will not work without a void 
