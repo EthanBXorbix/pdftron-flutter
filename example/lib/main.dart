@@ -182,16 +182,14 @@ class _ViewerState extends State<Viewer> {
               personalNotesIconSelected = !personalNotesIconSelected;
               annotationsIconSelected = false;
 
+              annotationsIcon = Icon(Icons.edit_outlined);
+
               if (personalNotesIconSelected) {
                 personalNotesIcon = Icon(Icons.feed);
+                saveAndSubmitIcon = Icon(Icons.save);
               } else {
                 personalNotesIcon = Icon(Icons.feed_outlined);
-              }
-
-              if (annotationsIconSelected) {
-                annotationsIcon = Icon(Icons.edit);
-              } else {
-                annotationsIcon = Icon(Icons.edit_outlined);
+                saveAndSubmitIcon = Icon(Icons.save_outlined);
               }
 
               personalNotesEventHandler();
@@ -204,16 +202,14 @@ class _ViewerState extends State<Viewer> {
               annotationsIconSelected = !annotationsIconSelected;
               personalNotesIconSelected = false;
 
-              if (personalNotesIconSelected) {
-                personalNotesIcon = Icon(Icons.feed);
-              } else {
-                personalNotesIcon = Icon(Icons.feed_outlined);
-              }
+              personalNotesIcon = Icon(Icons.feed_outlined);
 
               if (annotationsIconSelected) {
                 annotationsIcon = Icon(Icons.edit);
+                saveAndSubmitIcon = Icon(Icons.upload);
               } else {
                 annotationsIcon = Icon(Icons.edit_outlined);
+                saveAndSubmitIcon = Icon(Icons.save_outlined);
               }
 
               annotationsEventHandler();
@@ -256,7 +252,7 @@ class _ViewerState extends State<Viewer> {
     if (personalNotesIconSelected) {
       print('Personal Note Saved');
     } else if (annotationsIconSelected) {
-      print('Annotation Saved');
+      print('Annotation Submitted');
     } else {
       print('Nothing Saved');
     }
