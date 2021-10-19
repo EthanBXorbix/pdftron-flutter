@@ -191,7 +191,7 @@ static NSString * const PTDeleteAllAnnotationsKey = @"deleteAllAnnotations";
 static NSString * const PTOpenAnnotationListKey = @"openAnnotationList";
 
 // xorbix function
-static NSString * const PTShowAnnotToolbarKey = @"showAnnotToolbar";
+static NSString * const PTMarkupOptionSelectedKey = @"markupOptionSelected";
 
 // argument
 static NSString * const PTDocumentArgumentKey = @"document";
@@ -215,7 +215,7 @@ static NSString * const PTAnnotationPropertiesArgumentKey = @"annotationProperti
 static NSString * const PTLeadingNavButtonIconArgumentKey = @"leadingNavButtonIcon";
 
 // xorbix argument
-static NSString * const PTShowAnnotToolbarArgumentsKey = @"showToolbar";
+static NSString * const PTMarkupOptionSelectedArgumentsKey = @"markupSelected";
 
 // event strings
 static NSString * const PTExportAnnotationCommandEventKey = @"export_annotation_command_event";

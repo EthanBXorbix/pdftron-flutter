@@ -74,6 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)hideViewModeItems:(NSArray<NSString *> *)viewModeItems;
 
+// Xorbix
+- (void)markupOptionSelected:(BOOL)markupSelected;
+@property (nonatomic) BOOL markupOptionSelected;
+
 @end
 
 @interface FLThumbnailsViewController : PTThumbnailsViewController

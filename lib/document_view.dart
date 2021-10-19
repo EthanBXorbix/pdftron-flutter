@@ -252,8 +252,8 @@ class DocumentViewController {
 
   /// Determines visibility of toolbar
   /// Xorbix function
-  Future<void> showAnnotToolbar(bool showToolbar) {
-    return _channel.invokeMethod(Functions.showAnnotToolbar,
-      <String, dynamic>{Parameters.showToolbar: showToolbar});
+  Future<void> markupOptionSelected(bool markupSelected) {
+    return _channel.invokeMethod(Functions.markupOptionSelected,
+      <String, dynamic>{Parameters.markupSelected: markupSelected});
   }
 }

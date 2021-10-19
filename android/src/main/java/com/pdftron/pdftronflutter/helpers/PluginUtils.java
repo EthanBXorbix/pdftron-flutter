@@ -86,6 +86,9 @@ public class PluginUtils {
     public static final String KEY_LEADING_NAV_BUTTON_ICON = "leadingNavButtonIcon";
     public static final String KEY_REQUESTED_ORIENTATION = "requestedOrientation";
 
+    // Xorbix
+    public static final String KEY_MARKUP_SELECTED = "markupSelected";
+
     public static final String KEY_CONFIG_DISABLED_ELEMENTS = "disabledElements";
     public static final String KEY_CONFIG_DISABLED_TOOLS = "disabledTools";
     public static final String KEY_CONFIG_MULTI_TAB_ENABLED = "multiTabEnabled";
@@ -214,6 +217,9 @@ public class PluginUtils {
     public static final String FUNCTION_GET_PAGE_ROTATION = "getPageRotation";
     public static final String FUNCTION_OPEN_ANNOTATION_LIST = "openAnnotationList";
     public static final String FUNCTION_SET_REQUESTED_ORIENTATION = "setRequestedOrientation";
+
+    // Xorbix
+    public static final String FUNCTION_MARKUP_OPTION_SELECTED = "markupOptionSelected";
 
     public static final String BUTTON_TOOLS = "toolsButton";
     public static final String BUTTON_SEARCH = "searchButton";
@@ -1743,6 +1749,11 @@ public class PluginUtils {
                 openAnnotationList(component);
                 break;
             }
+            case FUNCTION_MARKUP_OPTION_SELECTED: {
+                checkFunctionPrecondition(component);
+                boolean markupSelected = call.argument(KEY_MARKUP_SELECTED);
+                markupOptionSelected(component, markupSelected);
+            }
             case FUNCTION_IMPORT_ANNOTATION_COMMAND: {
                 checkFunctionPrecondition(component);
                 String xfdfCommand = call.argument(KEY_XFDF_COMMAND);
@@ -2092,6 +2103,13 @@ public class PluginUtils {
                 }
             }
         }
+    }
+
+    private static void markupOptionSelected(ViewerComponent component, boolean markupSelected) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        ToolManager toolManager = component.getToolManager();
+
+        // TODO: Figure out how to force show/hide the toolbars from here
     }
 
     private static void setFlagsForAnnotations(String annotationsWithFlags, MethodChannel.Result result, ViewerComponent component) throws PDFNetException, JSONException {

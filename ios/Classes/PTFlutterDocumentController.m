@@ -121,6 +121,12 @@ static BOOL PT_addMethod(Class cls, SEL selector, void (^block)(id))
     return !self.topAppNavBarHidden;;
 }
 
+- (void)markupOptionSelected:(BOOL) markupSelected
+{
+    _markupOptionSelected = markupSelected;
+    [self setControlsHidden:false animated: true];
+}
+
 - (BOOL)controlsHidden
 {
     if (self.navigationController) {
@@ -136,7 +142,8 @@ static BOOL PT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 - (void)setControlsHidden:(BOOL)controlsHidden animated:(BOOL)animated
 {
-    [super setControlsHidden:controlsHidden animated:animated];
+    BOOL hideControls = controlsHidden || !_markupOptionSelected;
+    [super setControlsHidden:hideControls animated:animated];
     
     // When the top toolbars are enabled...
     if ([self areTopToolbarsEnabled] &&

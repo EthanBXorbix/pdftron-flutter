@@ -33,7 +33,7 @@ class Functions {
   static const setRequestedOrientation = "setRequestedOrientation";
 
   // Xorbix functions
-  static const showAnnotToolbar = "showAnnotToolbar";
+  static const markupOptionSelected = "markupOptionSelected";
 }
 
 /// Defines the parameters of the functions.
@@ -60,7 +60,7 @@ class Parameters {
   static const requestedOrientation = "requestedOrientation";
 
   // Xorbix Parameters
-  static const showToolbar = "showToolbar";
+  static const markupSelected = "markupSelected";
 }
 
 /// Defines the parameters of the events.

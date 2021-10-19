@@ -1202,9 +1202,9 @@
         [self deleteAllAnnotations:result];
     } else if ([call.method isEqualToString:PTOpenAnnotationListKey]) {
         [self openAnnotationList:result];
-    } else if ([call.method isEqualToString:PTShowAnnotToolbarKey]) {
-        bool showToolbarValue = [[PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTShowAnnotToolbarArgumentsKey]] boolValue];
-        [self showAnnotToolbar:showToolbarValue];
+    } else if ([call.method isEqualToString:PTMarkupOptionSelectedKey]) {
+        bool markupSelected = [[PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTMarkupOptionSelectedArgumentsKey]] boolValue];
+        [self markupOptionSelected:markupSelected];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -2356,10 +2356,10 @@
 }
 
 #pragma mark - Xorbix Functions
--(void)showAnnotToolbar:(BOOL)showToolbar 
+-(void)markupOptionSelected:(BOOL)markupSelected 
 {
-    PTDocumentController *documentController = [self getDocumentController];
-    documentController.toolbarHidden = showToolbar;
+    PTFlutterDocumentController *documentController = [self getDocumentController];
+    [documentController markupOptionSelected:markupSelected];
 }
 
 #pragma mark - Helper
