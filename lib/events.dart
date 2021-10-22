@@ -120,9 +120,6 @@ CancelListener startDocumentErrorListener(DocumentErrorListener listener) {
   };
 }
 
-/// Listens for annotation changes and gets the associated action.
-///
-/// Returns a function that can cancel the listener.
 CancelListener startAnnotationChangedListener(
     AnnotationChangedListener listener) {
   var subscription = _annotationChangedChannel
@@ -130,12 +127,12 @@ CancelListener startAnnotationChangedListener(
       .listen((annotationsWithActionString) {
     dynamic annotationsWithAction = jsonDecode(annotationsWithActionString);
     String action = annotationsWithAction[EventParameters.action];
-    String annotations =
-        annotationsWithAction[EventParameters.annotations];
-    List<Annot> annotList = new List<Annot>.empty(growable: true);
-    var annotJson = json.decode(annotations);
-    for (var annotItem in annotJson) {
-      annotList.add(Annot(annotItem['id'], annotItem['pageNumber']));
+    List<dynamic> annotations = Platform.isIOS ?
+    jsonDecode(annotationsWithAction[EventParameters.annotations]) :
+    annotationsWithAction[EventParameters.annotations];
+    List<Annot> annotList = [];
+    for (dynamic annotation in annotations) {
+      annotList.add(new Annot.fromJson(annotation));
     }
     listener(action, annotList);
   }, cancelOnError: true);
