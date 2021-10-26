@@ -76,6 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Xorbix
 - (void)markupOptionSelected:(BOOL)markupSelected;
+- (NSString*)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations;
 @property (nonatomic) BOOL markupOptionSelected;
 
 @end

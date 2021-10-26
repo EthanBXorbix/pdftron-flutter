@@ -34,6 +34,7 @@ class Functions {
 
   // Xorbix functions
   static const markupOptionSelected = "markupOptionSelected";
+  static const createDocFromPageRangeWithAnnotations = "createDocFromPageRangeWithAnnotations";
 }
 
 /// Defines the parameters of the functions.
@@ -61,6 +62,10 @@ class Parameters {
 
   // Xorbix Parameters
   static const markupSelected = "markupSelected";
+  static const sourceDocPath = "sourceDocPath";
+  static const startPage = "startPage";
+  static const endPage = "endPage";
+  static const xorbixAnnotations = "annotations";
 }
 
 /// Defines the parameters of the events.

@@ -253,6 +253,19 @@ class PdftronFlutter {
       <String, dynamic>{Parameters.markupSelected: markupSelected});
   }
 
+  /// Create a document using a subset of pages from the original document
+  /// Xorbix function
+  /// Accepts the filepath for the original document, the start and end pages, and the annotations to import
+  static Future<dynamic> createDocFromPageRangeWithAnnotations(String sourceDocPath, int startPage, int endPage, String annotations) {
+    return _channel.invokeMethod(Functions.createDocFromPageRangeWithAnnotations,
+      <String, dynamic>{
+        Parameters.sourceDocPath: sourceDocPath,
+        Parameters.startPage: startPage,
+        Parameters.endPage: endPage,
+        Parameters.xorbixAnnotations: annotations
+      });
+  }
+
   // Android only.
   static Future<void> setRequestedOrientation(int requestedOrientation) {
     return _channel.invokeMethod(Functions.setRequestedOrientation,

@@ -1205,6 +1205,12 @@
     } else if ([call.method isEqualToString:PTMarkupOptionSelectedKey]) {
         bool markupSelected = [[PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTMarkupOptionSelectedArgumentsKey]] boolValue];
         [self markupOptionSelected:markupSelected];
+    } else if ([call.method isEqualToString:PTCreateDocFromPageRangeWithAnnotationsKey]) {
+        NSString* sourceDocPath = [PdftronFlutterPlugin PT_idAsNSString:call.arguments[PTSourceDocPathArgumentsKey]];
+        int startPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTStartPageArgumentsKey]];
+        int endPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTEndPageArgumentsKey]];
+        NSString* xorbixAnnotations = [PdftronFlutterPlugin PT_idAsNSString:call.arguments[PTXorbixAnnotationsArgumentsKey]];
+        [self createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:xorbixAnnotations resultToken:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -2356,10 +2362,16 @@
 }
 
 #pragma mark - Xorbix Functions
--(void)markupOptionSelected:(BOOL)markupSelected 
+- (void)markupOptionSelected:(BOOL)markupSelected 
 {
     PTFlutterDocumentController *documentController = [self getDocumentController];
     [documentController markupOptionSelected:markupSelected];
+}
+
+- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult
+{
+    PTFlutterDocumentController *documentController = [self getDocumentController];
+    flutterResult([documentController createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:annotations]);
 }
 
 #pragma mark - Helper

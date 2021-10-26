@@ -192,6 +192,7 @@ static NSString * const PTOpenAnnotationListKey = @"openAnnotationList";
 
 // xorbix function
 static NSString * const PTMarkupOptionSelectedKey = @"markupOptionSelected";
+static NSString * const PTCreateDocFromPageRangeWithAnnotationsKey = @"createDocFromPageRangeWithAnnotations";
 
 // argument
 static NSString * const PTDocumentArgumentKey = @"document";
@@ -216,6 +217,10 @@ static NSString * const PTLeadingNavButtonIconArgumentKey = @"leadingNavButtonIc
 
 // xorbix argument
 static NSString * const PTMarkupOptionSelectedArgumentsKey = @"markupSelected";
+static NSString * const PTSourceDocPathArgumentsKey = @"sourceDocPath";
+static NSString * const PTStartPageArgumentsKey = @"startPage";
+static NSString * const PTEndPageArgumentsKey = @"endPage";
+static NSString * const PTXorbixAnnotationsArgumentsKey = @"annotations";
 
 // event strings
 static NSString * const PTExportAnnotationCommandEventKey = @"export_annotation_command_event";
@@ -380,6 +385,8 @@ typedef enum {
 - (void)topLeftButtonPressed:(UIBarButtonItem *)barButtonItem;
 
 - (void)topLeftButtonPressed:(UIBarButtonItem *)barButtonItem;
+
+- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult;
 
 - (UIView*)view;
 

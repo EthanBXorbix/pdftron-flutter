@@ -2,6 +2,7 @@ package com.pdftron.pdftronflutter.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -9,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
+import com.pdftron.pdf.PageSet;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerBuilder2;
@@ -24,6 +27,7 @@ import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdftronflutter.helpers.PluginUtils;
 import com.pdftron.pdftronflutter.helpers.ViewerComponent;
 import com.pdftron.pdftronflutter.helpers.ViewerImpl;
+import com.pdftron.sdf.SDFDoc;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -226,6 +230,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 impleme
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)
                 .toolManagerBuilder(mToolManagerBuilder)
                 .build();
+    }
+
+    public void createDocFromPageRangeWithAnnotations(String sourceDocPath, int startPage, int endPage, String annotations, MethodChannel.Result result) {
+        try {
+            PDFDoc sourceDoc = new PDFDoc(sourceDocPath);
+            PDFDoc doctoSend = new PDFDoc();
+
+            PageSet pageSet = new PageSet(startPage, endPage);
+
+            doctoSend.insertPages(0, sourceDoc, pageSet, PDFDoc.InsertBookmarkMode.NONE, null);
+
+            FDFDoc annotData = new FDFDoc(annotations);
+
+            doctoSend.fdfMerge(annotData);
+
+            byte[] docData = doctoSend.save(SDFDoc.SaveMode.COMPATIBILITY, null);
+            result.success(Base64.encodeToString(docData, Base64.DEFAULT));
+        } catch (Exception e) {
+            // do something
+            result.error("Exception Creating New Document", e.getMessage(), null);
+        }
     }
 
     @Override

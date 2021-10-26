@@ -196,6 +196,62 @@ static BOOL PT_addMethod(Class cls, SEL selector, void (^block)(id))
     }
 }
 
+// Xorbix - create PDFDoc from page range
+- (NSString*)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations
+{
+    NSString *lines = @"0";
+    @try {
+        if (sourceDocPath == NULL) {
+            return @"Source Doc Path is nil";
+        } else if (annotations == NULL) {
+            return @"Annotations String is Null";
+        }
+        // Create PDFDoc for source doc and new doc
+        PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
+        PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
+
+        lines = @"1";
+
+        // Set enum values
+        PTPageSetFilter psFilter = e_ptall;
+        PTInsertFlag iFlag = e_ptinsert_none;
+
+        lines = @"2";
+
+        // Generate page set with first and last pages
+        PTPageSet* pageSet = [[PTPageSet alloc] initWithRange_start: startPage range_end: endPage filter: psFilter];
+
+        lines = @"3";
+
+        // Insert pages from source doc into new doc
+        [docToSend InsertPagesWithPageSet: 1 src_doc: sourceDoc source_page_set: pageSet flag: iFlag];
+
+        lines = @"4";
+
+        // Create XFDF file from annotation data
+        PTFDFDoc* annotData = [PTFDFDoc CreateFromXFDF: annotations];
+        
+        lines = @"5";
+
+        // Import annotation data
+        [docToSend FDFMerge: annotData];
+
+        lines = @"6";
+
+        // Save doc as NSData
+        NSData* docData = [docToSend SaveToBuf:0];
+
+        lines = @"7";
+
+        return [docData base64EncodedStringWithOptions:0];
+    }
+    @catch (NSException *exception) {
+        return (@"Lines - %@ | Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", lines, exception.name, exception.reason, exception.description, exception.debugDescription);
+    }
+    
+    return @"Returned without a new document or an exception";
+}
+
 #pragma mark - <PTBookmarkViewControllerDelegate>
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didAddBookmark:(PTUserBookmark *)bookmark

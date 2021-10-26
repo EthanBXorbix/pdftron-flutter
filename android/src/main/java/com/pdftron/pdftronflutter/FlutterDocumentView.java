@@ -32,6 +32,11 @@ import static com.pdftron.pdftronflutter.helpers.PluginUtils.EVENT_PAGE_MOVED;
 import static com.pdftron.pdftronflutter.helpers.PluginUtils.FUNCTION_OPEN_DOCUMENT;
 import static com.pdftron.pdftronflutter.helpers.PluginUtils.FUNCTION_SET_LEADING_NAV_BUTTON_ICON;
 import static com.pdftron.pdftronflutter.helpers.PluginUtils.KEY_LEADING_NAV_BUTTON_ICON;
+import static com.pdftron.pdftronflutter.helpers.PluginUtils.FUNCTION_CREATE_DOC_FROM_PAGE_RANGE_WITH_ANNOTATIONS;
+import static com.pdftron.pdftronflutter.helpers.PluginUtils.KEY_SOURCE_DOC_PATH;
+import static com.pdftron.pdftronflutter.helpers.PluginUtils.KEY_START_PAGE;
+import static com.pdftron.pdftronflutter.helpers.PluginUtils.KEY_END_PAGE;
+import static com.pdftron.pdftronflutter.helpers.PluginUtils.KEY_XORBIX_ANNOTATIONS;
 
 public class FlutterDocumentView implements PlatformView, MethodChannel.MethodCallHandler {
 
@@ -254,7 +259,23 @@ public class FlutterDocumentView implements PlatformView, MethodChannel.MethodCa
                 documentView.setLeadingNavButtonIcon(leadingNavButtonIcon);
                 break;
             }
+            case FUNCTION_CREATE_DOC_FROM_PAGE_RANGE_WITH_ANNOTATIONS: {
+                String sourceDocPath = call.argument(KEY_SOURCE_DOC_PATH);
+                Integer startPage = call.argument(KEY_START_PAGE);
+                Integer endPage = call.argument(KEY_END_PAGE);
+                String annotations = call.argument(KEY_XORBIX_ANNOTATIONS);
+                if (sourceDocPath != null && startPage != null && endPage != null && annotations != null) {
+                    try {
+                        documentView.createDocFromPageRangeWithAnnotations(sourceDocPath, startPage, endPage, annotations, result);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        result.error("Exception", ex.getMessage(), null);
+                    }
+                }
+                break;
+            }
             default:
+                
                 PluginUtils.onMethodCall(call, result, documentView);
                 break;
         }
