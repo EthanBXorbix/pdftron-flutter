@@ -1893,7 +1893,6 @@ public class PluginUtils {
                 break;
             }
             case FUNCTION_CREATE_DOC_FROM_PAGE_RANGE_WITH_ANNOTATIONS: {
-                checkFunctionPrecondition(component);
                 String sourceDocPath = call.argument(KEY_SOURCE_DOC_PATH);
                 Integer startPage = call.argument(KEY_START_PAGE);
                 Integer endPage = call.argument(KEY_END_PAGE);
@@ -2135,23 +2134,32 @@ public class PluginUtils {
     }
 
     private static void createDocFromPageRangeWithAnnotations(String sourceDocPath, int startPage, int endPage, String annotations, MethodChannel.Result result) {
+        PDFDoc sourceDoc = null;
+        PDFDoc docToSend = null;
+
         try {
-            PDFDoc sourceDoc = new PDFDoc(sourceDocPath);
-            PDFDoc doctoSend = new PDFDoc();
+            sourceDoc = new PDFDoc(sourceDocPath);
+            docToSend = new PDFDoc();
 
             PageSet pageSet = new PageSet(startPage, endPage);
 
-            doctoSend.insertPages(0, sourceDoc, pageSet, PDFDoc.InsertBookmarkMode.NONE, null);
+            docToSend.insertPages(0, sourceDoc, pageSet, PDFDoc.InsertBookmarkMode.NONE, null);
 
             FDFDoc annotData = new FDFDoc(annotations);
 
-            doctoSend.fdfMerge(annotData);
+            docToSend.fdfMerge(annotData);
 
-            byte[] docData = doctoSend.save(SDFDoc.SaveMode.COMPATIBILITY, null);
+            byte[] docData = docToSend.save(SDFDoc.SaveMode.COMPATIBILITY, null);
             result.success(Base64.encodeToString(docData, Base64.DEFAULT));
         } catch (Exception e) {
             // do something
             result.error("Error creating new document", e.getMessage(), null);
+        } finally {
+            try {
+                if (sourceDoc != null) sourceDoc.close();
+                if (docToSend != null) docToSend.close();
+            } catch (Exception ex) {
+            }
         }
     }
 

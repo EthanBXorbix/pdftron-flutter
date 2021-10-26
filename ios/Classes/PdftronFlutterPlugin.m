@@ -2374,12 +2374,12 @@
     // result.
     // flutterResult([documentController createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:annotations]);
 
+    // Create PDFDoc for source doc and new doc
+    PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
+    PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
+
     NSString *lines = @"0";
     @try {
-        
-        // Create PDFDoc for source doc and new doc
-        PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
-        PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
 
         // Set enum values
         PTPageSetFilter psFilter = e_ptall;
@@ -2391,6 +2391,10 @@
         
         for (int i = startPage; i <= endPage; i++) {
             PTPage *page = [sourceDoc GetPage:i];
+            if (page == nil || page == NULL || [page GetContents] == NULL) {
+                flutterResult(@"Page has null contents");
+                return;
+            }
             [docToSend PagePushBack:page];
         }
 
@@ -2411,7 +2415,11 @@
     @catch (NSException *exception) {
         flutterResult((@"Lines - %@ | Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", lines, exception.name, exception.reason, exception.description, exception.debugDescription));
     }
-    
+    @finally {
+        [sourceDoc Close];
+        [docToSend Close];
+    }
+
     flutterResult(@"Returned without a new document or an exception");
 }
 
