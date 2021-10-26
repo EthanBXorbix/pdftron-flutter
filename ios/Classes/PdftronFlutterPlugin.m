@@ -2370,8 +2370,49 @@
 
 - (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult
 {
-    PTFlutterDocumentController *documentController = [self getDocumentController];
-    flutterResult([documentController createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:annotations]);
+    // PTFlutterDocumentController *documentController = [self getDocumentController];
+    // result.
+    // flutterResult([documentController createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:annotations]);
+
+    NSString *lines = @"0";
+    @try {
+        
+        // Create PDFDoc for source doc and new doc
+        PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
+        PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
+
+        // Set enum values
+        PTPageSetFilter psFilter = e_ptall;
+        PTInsertFlag iFlag = e_ptinsert_none;
+
+        // Generate page set with first and last pages
+        //PTPageSet* pageSet = [[PTPageSet alloc] initWithRange_start: startPage range_end: endPage filter: psFilter];
+
+        
+        for (int i = startPage; i <= endPage; i++) {
+            PTPage *page = [sourceDoc GetPage:i];
+            [docToSend PagePushBack:page];
+        }
+
+        // Insert pages from source doc into new doc
+        //[docToSend InsertPages: 0 src_doc: sourceDoc start_page: startPage end_page: endPage flag: iFlag];
+
+        // Create XFDF file from annotation data
+        PTFDFDoc* annotData = [PTFDFDoc CreateFromXFDF: annotations];
+
+        // Import annotation data
+        [docToSend FDFMerge: annotData];
+
+        // Save doc as NSData
+        NSData* docData = [docToSend SaveToBuf:0];
+
+        flutterResult([docData base64EncodedStringWithOptions:0]);
+    }
+    @catch (NSException *exception) {
+        flutterResult((@"Lines - %@ | Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", lines, exception.name, exception.reason, exception.description, exception.debugDescription));
+    }
+    
+    flutterResult(@"Returned without a new document or an exception");
 }
 
 #pragma mark - Helper
