@@ -386,7 +386,7 @@ typedef enum {
 
 - (void)topLeftButtonPressed:(UIBarButtonItem *)barButtonItem;
 
-- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult;
+- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(NSString *)startPage endPage:(NSString *)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult;
 
 - (UIView*)view;
 

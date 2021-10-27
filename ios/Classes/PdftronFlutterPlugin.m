@@ -1207,8 +1207,8 @@
         [self markupOptionSelected:markupSelected];
     } else if ([call.method isEqualToString:PTCreateDocFromPageRangeWithAnnotationsKey]) {
         NSString* sourceDocPath = [PdftronFlutterPlugin PT_idAsNSString:call.arguments[PTSourceDocPathArgumentsKey]];
-        int startPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTStartPageArgumentsKey]];
-        int endPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTEndPageArgumentsKey]];
+        NSNumber* startPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTStartPageArgumentsKey]];
+        NSNumber* endPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTEndPageArgumentsKey]];
         NSString* xorbixAnnotations = [PdftronFlutterPlugin PT_idAsNSString:call.arguments[PTXorbixAnnotationsArgumentsKey]];
         [self createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:xorbixAnnotations resultToken:result];
     } else {
@@ -2368,7 +2368,7 @@
     [documentController markupOptionSelected:markupSelected];
 }
 
-- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(int)startPage endPage:(int)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult
+- (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(NSNumber *)startPage endPage:(NSNumber *)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult
 {
     // PTFlutterDocumentController *documentController = [self getDocumentController];
     // result.
@@ -2378,8 +2378,10 @@
     PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
     PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
 
-    NSString *lines = @"0";
     @try {
+
+        int sp = [startPage intValue];
+        int ep = [endPage intValue];
 
         // Set enum values
         PTPageSetFilter psFilter = e_ptall;
@@ -2388,11 +2390,18 @@
         // Generate page set with first and last pages
         //PTPageSet* pageSet = [[PTPageSet alloc] initWithRange_start: startPage range_end: endPage filter: psFilter];
 
-        
-        for (int i = startPage; i <= endPage; i++) {
+        for (int i = sp; i <= ep; i++) {
             PTPage *page = [sourceDoc GetPage:i];
-            if (page == nil || page == NULL || [page GetContents] == NULL) {
-                flutterResult(@"Page has null contents");
+            if (page == nil) {
+                flutterResult(@"Page is nil");
+                return;
+            }
+            if (page == NULL) {
+                flutterResult(@"Page is null");
+                return;
+            }
+            if ([page GetContents] == NULL) {
+                flutterResult([NSString stringWithFormat:@"Page %i has null contents", i]);
                 return;
             }
             [docToSend PagePushBack:page];
@@ -2413,7 +2422,7 @@
         flutterResult([docData base64EncodedStringWithOptions:0]);
     }
     @catch (NSException *exception) {
-        flutterResult((@"Lines - %@ | Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", lines, exception.name, exception.reason, exception.description, exception.debugDescription));
+        flutterResult((@"Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", exception.name, exception.reason, exception.description, exception.debugDescription));
     }
     @finally {
         [sourceDoc Close];
