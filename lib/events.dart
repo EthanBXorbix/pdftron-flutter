@@ -130,14 +130,23 @@ CancelListener startAnnotationChangedListener(
       .listen((annotationsWithActionString) {
     dynamic annotationsWithAction = jsonDecode(annotationsWithActionString);
     String action = annotationsWithAction[EventParameters.action];
-    String annotations =
+    if (Platform.isIOS) {
+      String annotations =
         annotationsWithAction[EventParameters.annotations];
-    List<Annot> annotList = new List<Annot>.empty(growable: true);
-    var annotJson = json.decode(annotations);
-    for (var annotItem in annotJson) {
-      annotList.add(Annot(annotItem['id'], annotItem['pageNumber']));
+      List<Annot> annotList = new List<Annot>.empty(growable: true);
+      var annotJson = json.decode(annotations);
+      for (var annotItem in annotJson) {
+        annotList.add(Annot(annotItem['id'], annotItem['pageNumber']));
+      }
+      listener(action, annotList);
+    } else {
+      List<dynamic> annotations = annotationsWithAction[EventParameters.annotations];
+      List<Annot> annotList = new List<Annot>.empty(growable: true);
+      for (dynamic annotation in annotations) {
+        annotList.add(new Annot.fromJson(annotation));
+      }
+      listener(action, annotList);
     }
-    listener(action, annotList);
   }, cancelOnError: true);
 
   return () {

@@ -2370,10 +2370,6 @@
 
 - (void)createDocFromPageRangeWithAnnotations:(NSString *)sourceDocPath startPage:(NSNumber *)startPage endPage:(NSNumber *)endPage annotations:(NSString *)annotations resultToken:(FlutterResult)flutterResult
 {
-    // PTFlutterDocumentController *documentController = [self getDocumentController];
-    // result.
-    // flutterResult([documentController createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:annotations]);
-
     // Create PDFDoc for source doc and new doc
     PTPDFDoc* sourceDoc = [[PTPDFDoc alloc] initWithFilepath:sourceDocPath];
     PTPDFDoc* docToSend = [[PTPDFDoc alloc] init];
