@@ -1916,6 +1916,60 @@ public class PluginUtils {
                     }
                 }
             }
+            case FUNCTION_GO_TO_PREVIOUS_PAGE: {
+                checkFunctionPrecondition(component);
+                gotoPreviousPage(result, component);
+                break;
+            }
+            case FUNCTION_GO_TO_NEXT_PAGE: {
+                checkFunctionPrecondition(component);
+                gotoNextPage(result, component);
+                break;
+            }
+            case FUNCTION_GO_TO_FIRST_PAGE: {
+                checkFunctionPrecondition(component);
+                gotoFirstPage(result, component);
+                break;
+            }
+            case FUNCTION_GO_TO_LAST_PAGE: {
+                checkFunctionPrecondition(component);
+                gotoLastPage(result, component);
+                break;
+            }
+            case FUNCTION_ADD_BOOKMARK: {
+                checkFunctionPrecondition(component);
+                String title = call.argument(KEY_TITLE);
+                Integer pageNumber = call.argument(KEY_PAGE_NUMBER);
+                if (title != null && pageNumber != null) {
+                    addBookmark(title, pageNumber, result, component);
+                }
+                break;
+            }
+            case FUNCTION_OPEN_BOOKMARK_LIST: {
+                checkFunctionPrecondition(component);
+                openBookmarkList(result, component);
+                break;
+            }
+            case FUNCTION_OPEN_LAYERS_LIST: {
+                checkFunctionPrecondition(component);
+                openLayersList(result, component);
+                break;
+            }
+            case FUNCTION_OPEN_OUTLINE_LIST: {
+                checkFunctionPrecondition(component);
+                openOutlineList(result, component);
+                break;
+            }
+            case FUNCTION_OPEN_NAVIGATION_LISTS: {
+                checkFunctionPrecondition(component);
+                openNavigationLists(result, component);
+                break;
+            }
+            case FUNCTION_GET_CURRENT_PAGE: {
+                checkFunctionPrecondition(component);
+                getCurrentPage(result, component);
+                break;
+            }
             default:
                 Log.e("PDFTronFlutter", "notImplemented: " + call.method);
                 result.notImplemented();
@@ -2177,6 +2231,62 @@ public class PluginUtils {
             } catch (Exception ex) {
             }
         }
+
+    private static void openBookmarkList(MethodChannel.Result result, ViewerComponent component) {
+        PdfViewCtrlTabHostFragment2 pdfViewCtrlTabHostFragment2 = component.getPdfViewCtrlTabHostFragment();
+        if (pdfViewCtrlTabHostFragment2 == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
+        if (isBookmarkListVisible) {
+            component.getPdfViewCtrlTabHostFragment().onOutlineOptionSelected(0);
+        }
+    }
+
+    private static void openOutlineList(MethodChannel.Result result, ViewerComponent component) {
+        PdfViewCtrlTabHostFragment2 pdfViewCtrlTabHostFragment2 = component.getPdfViewCtrlTabHostFragment();
+        if (pdfViewCtrlTabHostFragment2 == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
+        if (isBookmarkListVisible) {
+            pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(1);
+        } else {
+            pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(0);
+        }
+    }
+
+    private static void openLayersList(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
+        PdfLayerDialog pdfLayerDialog = new PdfLayerDialog(pdfViewCtrl.getContext(), pdfViewCtrl);
+        pdfLayerDialog.show();
+    }
+
+    private static void openNavigationLists(MethodChannel.Result result, ViewerComponent component) {
+        PdfViewCtrlTabHostFragment2 pdfViewCtrlTabHostFragment2 = component.getPdfViewCtrlTabHostFragment();
+        if (pdfViewCtrlTabHostFragment2 == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
+        pdfViewCtrlTabHostFragment2.onOutlineOptionSelected();
+    }
+
+    private static void getCurrentPage(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
+        result.success(pdfViewCtrl.getCurrentPage());
     }
 
     private static void setFlagsForAnnotations(String annotationsWithFlags, MethodChannel.Result result, ViewerComponent component) throws PDFNetException, JSONException {

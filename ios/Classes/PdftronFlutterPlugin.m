@@ -1233,6 +1233,16 @@
         NSNumber* endPage = [PdftronFlutterPlugin PT_idAsNSNumber:call.arguments[PTEndPageArgumentsKey]];
         NSString* xorbixAnnotations = [PdftronFlutterPlugin PT_idAsNSString:call.arguments[PTXorbixAnnotationsArgumentsKey]];
         [self createDocFromPageRangeWithAnnotations:sourceDocPath startPage:startPage endPage:endPage annotations:xorbixAnnotations resultToken:result];
+    } else if ([call.method isEqualToString:PTOpenBookmarkListKey]) {
+        [self openBookmarkList:result];
+    } else if ([call.method isEqualToString:PTOpenOutlineListKey]) {
+        [self openOutlineList:result];
+    } else if ([call.method isEqualToString:PTOpenLayersListKey]) {
+        [self openLayersList:result];
+    } else if ([call.method isEqualToString:PTOpenNavigationListsKey]) {
+        [self openNavigationLists:result];
+    } else if ([call.method isEqualToString:PTGetCurrentPageKey]) {
+        [self getCurrentPage:result];
     } else {
         result(FlutterMethodNotImplemented);
     }

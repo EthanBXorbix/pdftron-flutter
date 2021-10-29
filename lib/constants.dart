@@ -31,6 +31,10 @@ class Functions {
   static const deleteAllAnnotations = "deleteAllAnnotations";
   static const openAnnotationList = "openAnnotationList";
   static const setRequestedOrientation = "setRequestedOrientation";
+
+  // Xorbix functions
+  static const markupOptionSelected = "markupOptionSelected";
+  static const createDocFromPageRangeWithAnnotations = "createDocFromPageRangeWithAnnotations";
   static const gotoPreviousPage = "gotoPreviousPage";
   static const gotoNextPage = "gotoNextPage";
   static const gotoFirstPage = "gotoFirstPage";
@@ -41,10 +45,6 @@ class Functions {
   static const openLayersList = "openLayersList";
   static const openNavigationLists = "openNavigationLists";
   static const getCurrentPage = "getCurrentPage";
-
-  // Xorbix functions
-  static const markupOptionSelected = "markupOptionSelected";
-  static const createDocFromPageRangeWithAnnotations = "createDocFromPageRangeWithAnnotations";
 }
 
 /// Defines the parameters of the functions.

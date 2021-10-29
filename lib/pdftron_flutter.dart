@@ -283,6 +283,39 @@ class PdftronFlutter {
       });
   }
 
+  // Android only.
+  /// Displays the bookmark tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled, the method does nothing.
+  static Future<void> openBookmarkList() {
+    return _channel.invokeMethod(Functions.openBookmarkList);
+  }
+
+  /// Displays the outline tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled, the method does nothing.
+  static Future<void> openOutlineList() {
+    return _channel.invokeMethod(Functions.openOutlineList);
+  }
+
+  /// On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled or there are no layers in the document, the method does nothing.
+  static Future<void> openLayersList() {
+    return _channel.invokeMethod(Functions.openLayersList);
+  }
+
+  /// Displays the existing list container. 
+  /// 
+  /// Its current tab will be the one last opened. 
+  static Future<void> openNavigationLists() {
+    return _channel.invokeMethod(Functions.openNavigationLists);
+  }
+
+  /// Changes the orientation of this activity
+  /// 
+  /// Android only. For more information on the native API, 
+  /// see the [Android API reference](https://developer.android.com/reference/android/app/Activity#setRequestedOrientation(int)).
   static Future<void> setRequestedOrientation(int requestedOrientation) {
     return _channel.invokeMethod(Functions.setRequestedOrientation,
         <String, dynamic>{Parameters.requestedOrientation: requestedOrientation});

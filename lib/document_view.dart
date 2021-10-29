@@ -292,12 +292,72 @@ class DocumentViewController {
   /// Xorbix function
   /// Accepts the filepath for the original document, the start and end pages, and the annotations to import
   Future<dynamic> createDocFromPageRangeWithAnnotations(String sourceDocPath, int startPage, int endPage, String annotations) {
-    return _channel.invokeMethod(Functions.createDocFromPageRangeWithAnnotations,
-      <String, dynamic>{
-        Parameters.sourceDocPath: sourceDocPath,
-        Parameters.startPage: startPage,
-        Parameters.endPage: endPage,
-        Parameters.xorbixAnnotations: annotations
-      });
+    return _channel.invokeMethod(
+        Functions.createDocFromPageRangeWithAnnotations,
+        <String, dynamic>{
+          Parameters.sourceDocPath: sourceDocPath,
+          Parameters.startPage: startPage,
+          Parameters.endPage: endPage,
+          Parameters.xorbixAnnotations: annotations
+        });
+  }
+
+  /// Displays the bookmark tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled, the method does nothing.
+  Future<void> openBookmarkList() {
+    return _channel.invokeMethod(Functions.openBookmarkList);
+  }
+
+  /// Displays the outline tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled, the method does nothing.
+  Future<void> openOutlineList() {
+    return _channel.invokeMethod(Functions.openOutlineList);
+  }
+
+  /// On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. 
+  /// 
+  /// If this tab has been disabled or there are no layers in the document, the method does nothing.
+  Future<void> openLayersList() {
+    return _channel.invokeMethod(Functions.openLayersList);
+  }
+
+  /// Displays the existing list container. 
+  /// 
+  /// Its current tab will be the one last opened. 
+  Future<void> openNavigationLists() {
+    return _channel.invokeMethod(Functions.openNavigationLists);
+  }
+
+  /// Go to the previous page of the document. 
+  /// 
+  /// If on first page, it will stay on first page.
+  Future<bool?> gotoPreviousPage() {
+    return _channel.invokeMethod(Functions.gotoPreviousPage);
+  }
+
+  /// Go to the next page of the document.
+  /// 
+  /// If on last page, it will stay on last page.
+  Future<bool?> gotoNextPage() {
+    return _channel.invokeMethod(Functions.gotoNextPage);
+  }
+
+  /// Go to the first page of the document.
+  Future<bool?> gotoFirstPage() {
+    return _channel.invokeMethod(Functions.gotoFirstPage);
+  }
+
+  /// Go to the last page of the document.
+  Future<bool?> gotoLastPage() {
+    return _channel.invokeMethod(Functions.gotoLastPage);
+  }
+
+  /// Gets the current page of the document.
+  /// 
+  /// The page numbers returned are 1-indexed.
+  Future<int?> getCurrentPage() {
+    return _channel.invokeMethod(Functions.getCurrentPage);
   }
 }
