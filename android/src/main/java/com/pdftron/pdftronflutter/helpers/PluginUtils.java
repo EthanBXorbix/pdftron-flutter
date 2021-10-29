@@ -2231,6 +2231,7 @@ public class PluginUtils {
             } catch (Exception ex) {
             }
         }
+    }
 
     private static void openBookmarkList(MethodChannel.Result result, ViewerComponent component) {
         PdfViewCtrlTabHostFragment2 pdfViewCtrlTabHostFragment2 = component.getPdfViewCtrlTabHostFragment();
