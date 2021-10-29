@@ -47,6 +47,7 @@ class Parameters {
   static const xfdf = "xfdf";
   static const bookmarkJson = "bookmarkJson";
   static const pageNumber = "pageNumber";
+  static const title = "title";
   static const toolMode = "toolMode";
   static const fieldNames = "fieldNames";
   static const fields = "fields";

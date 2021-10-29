@@ -27,6 +27,7 @@ import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
+import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.AnnotEditRectGroup;
@@ -223,6 +224,16 @@ public class PluginUtils {
     public static final String FUNCTION_GET_PAGE_ROTATION = "getPageRotation";
     public static final String FUNCTION_OPEN_ANNOTATION_LIST = "openAnnotationList";
     public static final String FUNCTION_SET_REQUESTED_ORIENTATION = "setRequestedOrientation";
+    public static final String FUNCTION_GO_TO_PREVIOUS_PAGE = "gotoPreviousPage";
+    public static final String FUNCTION_GO_TO_NEXT_PAGE = "gotoNextPage";
+    public static final String FUNCTION_GO_TO_FIRST_PAGE = "gotoFirstPage";
+    public static final String FUNCTION_GO_TO_LAST_PAGE = "gotoLastPage";
+    public static final String FUNCTION_ADD_BOOKMARK = "addBookmark";
+    public static final String FUNCTION_OPEN_BOOKMARK_LIST = "openBookmarkList";
+    public static final String FUNCTION_OPEN_OUTLINE_LIST = "openOutlineList";
+    public static final String FUNCTION_OPEN_LAYERS_LIST = "openLayersList";
+    public static final String FUNCTION_OPEN_NAVIGATION_LISTS = "openNavigationLists";
+    public static final String FUNCTION_GET_CURRENT_PAGE = "getCurrentPage";
 
     // Xorbix
     public static final String FUNCTION_MARKUP_OPTION_SELECTED = "markupOptionSelected";
@@ -843,7 +854,6 @@ public class PluginUtils {
                 }
                 if (!configJson.isNull(KEY_CONFIG_PERMANENT_PAGE_NUMBER_INDICATOR)) {
                     boolean permanentPageNumberIndicator = configJson.getBoolean(KEY_CONFIG_PERMANENT_PAGE_NUMBER_INDICATOR);
-                    PdfViewCtrlSettingsManager.setShowScrollbarOption(context, true);
                     builder.permanentPageNumberIndicator(permanentPageNumberIndicator);
                 }
                 if (!configJson.isNull(KEY_CONFIG_OPEN_URL_PATH)) {
@@ -1753,7 +1763,7 @@ public class PluginUtils {
             }
             case FUNCTION_OPEN_ANNOTATION_LIST: {
                 checkFunctionPrecondition(component);
-                openAnnotationList(component);
+                openAnnotationList(result, component);
                 break;
             }
             case FUNCTION_MARKUP_OPTION_SELECTED: {
@@ -2102,25 +2112,31 @@ public class PluginUtils {
         }
     }
 
-    private static void openAnnotationList(ViewerComponent component) {
+    private static void openAnnotationList(MethodChannel.Result result, ViewerComponent component) {
+        PdfViewCtrlTabHostFragment2 pdfViewCtrlTabHostFragment2 = component.getPdfViewCtrlTabHostFragment();
+        if (pdfViewCtrlTabHostFragment2 == null) {
+            result.error("InvalidState", "Activity not attached", null);
+            return;
+        }
+
         if (isBookmarkListVisible) {
             if (isOutlineListVisible) {
                 if (isAnnotationListVisible) {
-                    component.getPdfViewCtrlTabHostFragment().onOutlineOptionSelected(2);
+                    pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(2);
                 }
             } else {
                 if (isAnnotationListVisible) {
-                    component.getPdfViewCtrlTabHostFragment().onOutlineOptionSelected(1);
+                    pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(1);
                 }
             }
         } else {
             if (isOutlineListVisible) {
                 if (isAnnotationListVisible) {
-                    component.getPdfViewCtrlTabHostFragment().onOutlineOptionSelected(1);
+                    pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(1);
                 }
             } else {
                 if (isAnnotationListVisible) {
-                    component.getPdfViewCtrlTabHostFragment().onOutlineOptionSelected(0);
+                    pdfViewCtrlTabHostFragment2.onOutlineOptionSelected(0);
                 }
             }
         }
@@ -2411,6 +2427,10 @@ public class PluginUtils {
             return;
         }
         BookmarkManager.importPdfBookmarks(pdfViewCtrl, bookmarkJson);
+        PdfViewCtrlTabHostFragment2 hostFragment2 = component.getPdfViewCtrlTabHostFragment();
+        if (hostFragment2 != null) {
+            hostFragment2.reloadUserBookmarks();
+        }
         result.success(null);
     }
 
@@ -2683,6 +2703,73 @@ public class PluginUtils {
             }
         }
         result.success(pageRotation);
+    }
+
+    private static void gotoPreviousPage(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "PDFViewCtrl not found", null);
+            return;
+        }
+        boolean pageChanged = pdfViewCtrl.gotoPreviousPage();
+        result.success(pageChanged);
+    }
+
+    private static void gotoNextPage(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "PDFViewCtrl not found", null);
+            return;
+        }
+        boolean pageChanged = pdfViewCtrl.gotoNextPage();
+        result.success(pageChanged);
+    }
+
+    private static void gotoFirstPage(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "PDFViewCtrl not found", null);
+            return;
+        }
+        boolean pageChanged = pdfViewCtrl.gotoFirstPage();
+        result.success(pageChanged);
+    }
+
+    private static void gotoLastPage(MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        if (pdfViewCtrl == null) {
+            result.error("InvalidState", "PDFViewCtrl not found", null);
+            return;
+        }
+        boolean pageChanged = pdfViewCtrl.gotoLastPage();
+        result.success(pageChanged);
+    }
+
+    private static void addBookmark(String title, Integer pageNumber, MethodChannel.Result result, ViewerComponent component) {
+        PDFViewCtrl pdfViewCtrl = component.getPdfViewCtrl();
+        PDFDoc pdfDoc = component.getPdfDoc();
+        if (pdfViewCtrl == null || pdfDoc == null ) {
+            result.error("InvalidState", "PDFViewCtrl not found", null);
+            return;
+        }
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            String jsonString = BookmarkManager.exportPdfBookmarks(pdfDoc);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            jsonObject.put(pageNumber.toString(), title);
+            jsonString = jsonObject.toString();
+            importBookmarkJson(jsonString, result, component);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     // Events
