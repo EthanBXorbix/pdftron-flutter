@@ -2412,10 +2412,11 @@
         // Import annotation data
         [docToSend FDFMerge: annotData];
 
-        // Save doc as NSData
-        NSData* docData = [docToSend SaveToBuf:0];
+        // Save doc to new path
+        NSString* newDocPath = [sourceDocPath stringByAppendingString:@"-submit.pdf"];
+        [docToSend SaveToFile:newDocPath flags:0];
 
-        flutterResult([docData base64EncodedStringWithOptions:0]);
+        flutterResult(newDocPath);
     }
     @catch (NSException *exception) {
         flutterResult((@"Name - %@ | Reason - %@ | Description - %@ | Debug Desc - %@", exception.name, exception.reason, exception.description, exception.debugDescription));

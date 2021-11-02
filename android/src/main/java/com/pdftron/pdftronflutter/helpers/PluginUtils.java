@@ -2149,8 +2149,10 @@ public class PluginUtils {
 
             docToSend.fdfMerge(annotData);
 
-            byte[] docData = docToSend.save(SDFDoc.SaveMode.COMPATIBILITY, null);
-            result.success(Base64.encodeToString(docData, Base64.DEFAULT));
+            String newDocPath = sourceDocPath + "-submit.pdf";
+            docToSend.save(newDocPath, SDFDoc.SaveMode.COMPATIBILITY, null);
+
+            result.success(newDocPath);
         } catch (Exception e) {
             // do something
             result.error("Error creating new document", e.getMessage(), null);
